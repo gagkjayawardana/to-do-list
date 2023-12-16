@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 function ToDoCard({ userId, id, title, completed }) {
   return (
     <div className="toDoCard">
-      <Card sx={{ width: '20%' }}>
+      <Card sx={{ width: '250px', marginTop: '20px', marginLeft: '20px' }}>
         <CardContent sx={{ textAlign: 'left' }}>
           <Typography variant="h6" gutterBottom>
             User ID: {userId}
@@ -21,8 +21,8 @@ function ToDoCard({ userId, id, title, completed }) {
           <Typography variant="subtitle1" gutterBottom>
             Title: {title}
           </Typography>
-          <Typography variant="body1" gutterBottom>
-            completed: {completed}
+          <Typography variant="body2" gutterBottom>
+            completed: {completed ? 'True' : 'False'}
           </Typography>
         </CardContent>
         <CardActions>

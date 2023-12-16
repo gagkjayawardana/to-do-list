@@ -5,12 +5,14 @@ import TextField from '@mui/material/TextField';
 import { styled } from 'styled-components';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as yup from 'yup';
+import { ToDoData } from '../../utils/toDoData';
+import ToDoCard from '../../components/ToDoCard/TodoCard';
 
 const Home_Contain = styled.div`
   width: 100%;
   min-height: 100vh;
   height: fit-content;
-  background-image: linear-gradient(#0000ff, #e6e6ff);
+  background-image: linear-gradient(to bottom right, #0000ff, #e6e6ff);
 `;
 
 const Home_Header = styled.div`
@@ -24,11 +26,24 @@ const Home_Header = styled.div`
 const Submit_Card = styled.div`
   width: 100%;
   height: fit-content;
-  padding: 20px 20px 20px 20px;
+  padding: 20px 20px 40px 20px;
 `;
 
 const Err_Msg = styled.span`
   color: #800000;
+`;
+
+const ToDo_list_container = styled.div`
+  width: 100%;
+  height: fit-content;
+`;
+
+const ToDo_List = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin-left: -20px;
 `;
 
 function HomePage() {
@@ -139,6 +154,46 @@ function HomePage() {
           </Formik>
         </div>
       </Submit_Card>
+      <ToDo_list_container>
+        <Typography
+          sx={{
+            color: '#ffffff',
+            marginTop: '20px',
+            marginLeft: '20px',
+            '@media (max-width: 600px)': {
+              fontSize: '15pt'
+            }
+          }}
+          variant="h4"
+          gutterBottom>
+          ToDo List
+        </Typography>
+      </ToDo_list_container>
+      <ToDo_List>
+        {/* {ToDoData.map((element, index) => (
+          <div key={`card-${index}`}>
+            <ToDoCard
+              userId={element.userId}
+              id={element.id}
+              title={element.title}
+              completed={element.completed}
+            />
+          </div>
+        ))} */}
+        {ToDoData.map((element, index) => {
+          console.log('element', element.completed);
+          return (
+            <div key={`card-${index}`}>
+              <ToDoCard
+                userId={element.userId}
+                id={element.id}
+                title={element.title}
+                completed={element.completed}
+              />
+            </div>
+          );
+        })}
+      </ToDo_List>
     </Home_Contain>
   );
 }
