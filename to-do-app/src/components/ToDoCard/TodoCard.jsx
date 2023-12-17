@@ -10,7 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import Checkbox from '@mui/material/Checkbox';
 
-function ToDoCard({ userId, id, title, completed }) {
+function ToDoCard({ userId, id, title, completed, onEdit, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCompleted, setEditedCompleted] = useState(completed);
 
@@ -19,11 +19,13 @@ function ToDoCard({ userId, id, title, completed }) {
   };
 
   const handleSaveClick = () => {
+    onEdit(id, { completed: editedCompleted });
     setIsEditing(false);
   };
 
   const handleCancelClick = () => {
     setIsEditing(false);
+    setEditedCompleted(completed);
   };
 
   const handleCheckboxChange = (event) => {
@@ -70,7 +72,7 @@ function ToDoCard({ userId, id, title, completed }) {
               <ModeEditIcon />
             </IconButton>
           )}
-          <IconButton>
+          <IconButton onClick={() => onDelete(id)}>
             <DeleteIcon />
           </IconButton>
         </CardActions>

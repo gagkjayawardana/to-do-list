@@ -7,6 +7,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as yup from 'yup';
 import { ToDoData } from '../../utils/toDoData';
 import ToDoCard from '../../components/ToDoCard/TodoCard';
+import { useSelector, useDispatch } from 'react-redux';
+import { addTodo, editTodo, deleteTodo } from '../../redux/todoSlice';
 
 const Home_Contain = styled.div`
   width: 100%;
@@ -47,7 +49,11 @@ const ToDo_List = styled.div`
 `;
 
 function HomePage() {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos.data);
+
   const [focusSubmitField, setFocusSubmitField] = useState(false);
+  const [data, setData] = useState([...ToDoData, ...todos]);
 
   const hadleSubmitField = () => {
     setFocusSubmitField(true);
@@ -62,9 +68,31 @@ function HomePage() {
   });
   const onSubmit = (e) => {
     const title = e.title;
-    console.log('Title', title);
+    const newTodo = {
+      userId: 3,
+      id: todos.length + 1,
+      title,
+      completed: false
+    };
+
+    dispatch(addTodo(newTodo));
+    setData((prevData) => [...prevData, newTodo]);
 
     e.title = '';
+  };
+
+  const onEdit = (id, updatedTodo) => {
+    dispatch(editTodo({ id, updatedTodo }));
+
+    setData((prevData) =>
+      prevData.map((todo) => (todo.id === id ? { ...todo, ...updatedTodo } : todo))
+    );
+  };
+
+  const onDelete = (id) => {
+    dispatch(deleteTodo(id));
+    const updatedToDoData = ToDoData.filter((todo) => todo.id !== id);
+    setData(updatedToDoData);
   };
   return (
     <Home_Contain>
@@ -170,17 +198,7 @@ function HomePage() {
         </Typography>
       </ToDo_list_container>
       <ToDo_List>
-        {/* {ToDoData.map((element, index) => (
-          <div key={`card-${index}`}>
-            <ToDoCard
-              userId={element.userId}
-              id={element.id}
-              title={element.title}
-              completed={element.completed}
-            />
-          </div>
-        ))} */}
-        {ToDoData.map((element, index) => {
+        {data.map((element, index) => {
           console.log('element', element.completed);
           return (
             <div key={`card-${index}`}>
@@ -189,6 +207,8 @@ function HomePage() {
                 id={element.id}
                 title={element.title}
                 completed={element.completed}
+                onEdit={() => onEdit(element.id, { completed: !element.completed })}
+                onDelete={() => onDelete(element.id)}
               />
             </div>
           );
