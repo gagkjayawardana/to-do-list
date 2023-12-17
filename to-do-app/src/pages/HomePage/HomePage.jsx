@@ -48,12 +48,29 @@ const ToDo_List = styled.div`
   margin-left: -20px;
 `;
 
+const ToDo_Filter = styled.div`
+  margin-left: 20px;
+  margin-bottom: 10px;
+`;
+
 function HomePage() {
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todos.data);
 
   const [focusSubmitField, setFocusSubmitField] = useState(false);
   const [data, setData] = useState([...ToDoData, ...todos]);
+  const [filter, setFilter] = useState('all');
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+  };
+
+  const filteredData = data.filter((task) => {
+    if (filter === 'all') return true;
+    if (filter === 'completed') return task.completed;
+    if (filter === 'active') return !task.completed;
+    return true;
+  });
 
   const hadleSubmitField = () => {
     setFocusSubmitField(true);
@@ -196,9 +213,35 @@ function HomePage() {
           gutterBottom>
           ToDo List
         </Typography>
+        <ToDo_Filter>
+          <Button
+            sx={{ backgroundColor: filter === 'all' ? '#000099' : '#0000e6' }}
+            variant="contained"
+            onClick={() => handleFilterChange('all')}>
+            All
+          </Button>
+          <Button
+            sx={{
+              backgroundColor: filter === 'completed' ? '#000099' : '#0000e6',
+              marginLeft: '10px'
+            }}
+            variant="contained"
+            onClick={() => handleFilterChange('completed')}>
+            Completed
+          </Button>
+          <Button
+            sx={{
+              backgroundColor: filter === 'active' ? '#000099' : '#0000e6',
+              marginLeft: '10px'
+            }}
+            variant="contained"
+            onClick={() => handleFilterChange('active')}>
+            Active
+          </Button>
+        </ToDo_Filter>
       </ToDo_list_container>
       <ToDo_List>
-        {data.map((element, index) => {
+        {filteredData.map((element, index) => {
           console.log('element', element.completed);
           return (
             <div key={`card-${index}`}>
