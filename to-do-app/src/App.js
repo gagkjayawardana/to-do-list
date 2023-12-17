@@ -2,7 +2,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage';
-import LoginPage from './pages/LoginPage/LoginPage';
+// import LoginPage from './pages/LoginPage/LoginPage';
 
 function App() {
   return (
@@ -11,8 +11,8 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/homePage" element={<HomePage />} />
+            {/* <Route path="/" element={<LoginPage />} /> */}
+            <Route path="/" element={<HomePage />} />
           </Routes>
         </BrowserRouter>
       </>
