@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -58,7 +58,7 @@ function HomePage() {
   const todos = useSelector((state) => state.todos.data);
 
   const [focusSubmitField, setFocusSubmitField] = useState(false);
-  const [data, setData] = useState([...ToDoData, ...todos]);
+  const [data, setData] = useState([...todos]);
   const [filter, setFilter] = useState('all');
 
   const handleFilterChange = (newFilter) => {
@@ -111,6 +111,10 @@ function HomePage() {
     const updatedToDoData = ToDoData.filter((todo) => todo.id !== id);
     setData(updatedToDoData);
   };
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify({ data }));
+  }, [data]);
   return (
     <Home_Contain>
       <Home_Header>
