@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import { styled } from 'styled-components';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as yup from 'yup';
@@ -77,25 +82,37 @@ function HomePage() {
   };
 
   const initialValues = {
-    title: ''
+    title: '',
+    deadline: '',
+    priority: ''
   };
 
   const validationSchema = yup.object().shape({
-    title: yup.string().required('Required')
+    title: yup.string().required('Required'),
+    deadline: yup.date().nullable().min(new Date(), 'Deadline must be after today'),
+    priority: yup.string()
   });
+
   const onSubmit = (e) => {
     const title = e.title;
+    const deadline = e.deadline;
+    const priority = e.priority;
+
     const newTodo = {
       userId: 3,
       id: todos.length + 1,
       title,
-      completed: false
+      completed: false,
+      deadline,
+      priority
     };
 
     dispatch(addTodo(newTodo));
     setData((prevData) => [...prevData, newTodo]);
 
     e.title = '';
+    e.deadline = '';
+    e.priority = '';
   };
 
   const onEdit = (id, updatedTodo) => {
@@ -181,6 +198,57 @@ function HomePage() {
                   <ErrorMessage name="title" render={(msg) => <Err_Msg>{msg}</Err_Msg>} />
                 }
               />
+              {focusSubmitField && (
+                <div>
+                  <Field
+                    as={TextField}
+                    name="deadline"
+                    sx={{
+                      width: '75%',
+                      marginTop: '10px',
+                      '@media (max-width: 600px)': {
+                        width: '100%'
+                      }
+                    }}
+                    variant="filled"
+                    type="date"
+                    helperText={
+                      <ErrorMessage name="deadline" render={(msg) => <Err_Msg>{msg}</Err_Msg>} />
+                    }
+                  />
+                  <FormHelperText style={{ color: '#e6e6e6', marginLeft: '15px' }}>
+                    Deadline
+                  </FormHelperText>
+
+                  <FormControl
+                    sx={{
+                      width: '50%',
+                      '@media (max-width: 600px)': {
+                        width: '100%'
+                      }
+                    }}
+                    variant="filled">
+                    <InputLabel
+                      sx={{
+                        color: '#e6e6e6'
+                      }}>
+                      Priority
+                    </InputLabel>
+                    <Field
+                      as={Select}
+                      name="priority"
+                      inputProps={{
+                        style: {
+                          color: '#e6e6e6'
+                        }
+                      }}>
+                      <MenuItem value="high">High</MenuItem>
+                      <MenuItem value="medium">Medium</MenuItem>
+                      <MenuItem value="low">Low</MenuItem>
+                    </Field>
+                  </FormControl>
+                </div>
+              )}
               <Button
                 sx={{
                   width: '100px',
@@ -188,12 +256,8 @@ function HomePage() {
                   backgroundColor: '#000099',
                   '&:hover': { backgroundColor: '#6666ff' },
                   textTransform: 'none',
-                  marginLeft: '30px',
-                  marginTop: '5px',
-                  '@media (max-width: 600px)': {
-                    marginLeft: '0',
-                    marginTop: '10px'
-                  }
+                  marginLeft: focusSubmitField ? '0' : '30px',
+                  marginTop: focusSubmitField ? '10px' : '5px'
                 }}
                 variant="contained"
                 type="submit">
@@ -246,7 +310,6 @@ function HomePage() {
       </ToDo_list_container>
       <ToDo_List>
         {filteredData.map((element, index) => {
-          console.log('element', element.completed);
           return (
             <div key={`card-${index}`}>
               <ToDoCard
@@ -254,6 +317,8 @@ function HomePage() {
                 id={element.id}
                 title={element.title}
                 completed={element.completed}
+                deadline={element.deadline}
+                priority={element.priority}
                 onEdit={() => onEdit(element.id, { completed: !element.completed })}
                 onDelete={() => onDelete(element.id)}
               />

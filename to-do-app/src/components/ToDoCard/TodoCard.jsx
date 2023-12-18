@@ -10,7 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import Checkbox from '@mui/material/Checkbox';
 
-function ToDoCard({ userId, id, title, completed, onEdit, onDelete }) {
+function ToDoCard({ userId, id, title, completed, deadline, priority, onEdit, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCompleted, setEditedCompleted] = useState(completed);
 
@@ -43,6 +43,12 @@ function ToDoCard({ userId, id, title, completed, onEdit, onDelete }) {
           </Typography>
           <Typography variant="subtitle1" gutterBottom>
             Title: {title}
+          </Typography>
+          <Typography variant="body2" gutterBottom>
+            Deadline: {deadline}
+          </Typography>
+          <Typography variant="body2" gutterBottom>
+            Priority: {priority}
           </Typography>
           {isEditing ? (
             <div>
