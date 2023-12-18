@@ -51,6 +51,7 @@ const ToDo_List = styled.div`
   flex-flow: row wrap;
   justify-content: center;
   margin-left: -20px;
+  padding-bottom: 20px;
 `;
 
 const ToDo_Filter = styled.div`
@@ -257,7 +258,10 @@ function HomePage() {
                   '&:hover': { backgroundColor: '#6666ff' },
                   textTransform: 'none',
                   marginLeft: focusSubmitField ? '0' : '30px',
-                  marginTop: focusSubmitField ? '10px' : '5px'
+                  marginTop: focusSubmitField ? '10px' : '5px',
+                  '@media (max-width: 600px)': {
+                    marginLeft: '0'
+                  }
                 }}
                 variant="contained"
                 type="submit">
